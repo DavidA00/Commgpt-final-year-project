@@ -1,6 +1,6 @@
 # CommGPT — A Teaching-Assistant LLM for Advanced Communication Systems
 
-[**→ Model weights on Hugging Face**](https://huggingface.co/dabboud/Commgpt-3B)
+[**→ Model weights on Hugging Face: huggingface.co/dabboud/Commgpt-3B**](https://huggingface.co/dabboud/Commgpt-3B)
 ---
 
 ## 1 · What is CommGPT?
@@ -45,13 +45,10 @@ If you wish to recreate the full RAG assistant, consult the pipeline diagrams an
 ## 4 · Acknowledgements
 CommGPT exists thanks to:
 
-Prof. Ibrahim Abou Faycal and Prof. Jihad Fahs for granting access to proprietary textbook drafts and providing expert feedback.
-
-Alibaba for releasing Qwen 2.5 under an open license.
-
-Marker developers for their PDF→ Markdown tool.
-
-The authors of Stella-400 M and MS-MARCO Cross-Encoder for open-sourcing strong embedding models.
+- Prof. Ibrahim Abou Faycal and Prof. Jihad Fahs for granting access to proprietary textbook drafts and providing expert feedback.
+- Alibaba for releasing Qwen 2.5 under an open license.
+- Marker developers for their PDF→ Markdown tool.
+- The authors of Stella-400 M and MS-MARCO Cross-Encoder for open-sourcing strong embedding models.
 
 See the report for more. 
 
