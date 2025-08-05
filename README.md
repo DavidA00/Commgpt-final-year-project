@@ -61,15 +61,7 @@ All third-party documents referenced during training retain their original licen
 ```latex
 @misc{CommGPT2025,
   title   = {CommGPT: A Domain-Tuned Qwen 2.5-3B Model for Advanced Communication Systems},
-  author  = {
-    Abboud, David and  
-    Eid, Alex and  
-    Menassa, Alexander and  
-    Abou Faycal, Ibrahim and  
-    Fahs, Jihad and  
-    Zaraket, Fadi and  
-    Chokr, Sally
-  },
+  author = {Abboud, David and Eid, Alex and Menassa, Alexander and Abou Faycal, Ibrahim and Fahs, Jihad and Zaraket, Fadi and Chokr, Sally}
   note    = {Model and report available at \url{https://huggingface.co/dabboud/Commgpt-3B}},
   year    = {2025}
 }
