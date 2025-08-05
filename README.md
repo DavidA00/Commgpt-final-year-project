@@ -9,52 +9,20 @@
 
 ---
 
-## 2 · Why we built it: Motivation, Needs, Constraints
+## 2 · Executive Summary
 
-### Pedagogical motivation  
-Communication-systems courses are concept-dense and mathematically demanding.  Students often need immediate feedback on derivations, parameter trade-offs or theoretical subtleties that rarely fit into standard office-hour windows.  CommGPT was conceived as a tireless assistant that can fill that gap, offering on-demand clarification without replacing the instructor’s deeper guidance.
+The CommGPT project attempts to create an AI teaching assistant that supports students in EECE 442, Communications Systems. Its motivation originates from the need of specialized chatbots that can provide guidance within technical fields like Communication Systems, where detailed, domain-specific knowledge is essential. Existing solutions lack the specificity and interactivity required for higher-level technical education, which is what drives this project. The design aims to provide responses that guide students towards solutions, mirroring the role of a human teaching assistant.\\
 
-### Practical needs  
-To be useful in a rigorous engineering course, the assistant had to:
+Several constraints impact the project, including computational limitations due to reliance on limited resources and technicalities, data security, sufficient accuracy, clarity and coherence of responses, and educational responsibility. These constraints guide the design and implementation choices to ensure that the system meets technical, qualitative, ethical, and educational standards.\\
 
-1. **Speak the language of the field**: notation for power spectral density, Nyquist criteria, matched filtering, QAM constellations.  
-2. **Reference actual course material** so that answers align with lecture slides and textbook chapters.  
-3. **Handle equation-heavy prompts** yet still output clear natural-language explanations suited to undergraduates.  
+The proposed solution involves a multistage system. It integrates retrieval-augmented generation (RAG) fusing the retrieval of open source documents based on cosine similarity between the query and specially created summaries of them with retrieved proprietary documents form another database. The documents are then reranked using a crossencoder, and
+passed to an LLM that was fine-tuned successively on easy, medium, and hard Q\&A with our generated and curated domain-specific data. We developed a graphical user interface (GUI) using Gradio, integrating conversation history and a customizable system prompt. \\
 
-### Project constraints  
-Several hard constraints shaped the implementation:
+Additionally, we constructed a dataset of 450 multiple-choice questions tailored specifically to Communication Systems for evaluating large language models (LLMs). 
+Our final RAG and Fine tuning setup with Qwen 2.5 3B model successfully achieved 61.33 \% score compared with a score of 57.11 \% with the base model. As for mathsral 7B, our RAG setup achieved a score of 70.22 \% vs a score of 58.22 \% with the base model. 
 
-* **Data confidentiality** — Portions of the dataset were proprietary notes kindly provided by Prof. Ibrahim Abou Faycal; those pages could not be shared outside the research team.  
-* **Compute budget** — The project had access to a single A100 GPU (80 GB) and limited cloud credits, ruling out gigantic models or multi-GPU sharding.  
-* **Zero-code distribution** — Because the private notes cannot be redistributed and the RAG pipeline depends on them, the accompanying codebase remains internal.  Only the model weights and the report could be released publicly.  
 
----
-
-## 3 · How it works (summary of the report)
-
-Although the code itself is not part of this repository, the report (`Implementation.pdf`) walks through every stage:
-
-* **Curated dataset**:  70 open-access PDFs plus select textbook excerpts were converted to Markdown via the Marker OCR/LLM pipeline, manually cleaned, chunked at ~750 words and enriched with keywords, difficulty scores and equation flags.  
-* **Dual-index RAG**:  Each chunk received a compact summary; summaries formed one FAISS index while full text formed the second.  At inference time a query was embedded (Stella-400 M), retrieved with Maximum-Marginal-Relevance, reranked by a cross-encoder and finally passed to the generator.  
-* **Curriculum fine-tuning**:  17 k QA pairs were generated in Easy → Medium → Hard stages.  Full fine-tuning of Qwen 2.5-3B via Unsloth on a single GPU brought the model from general instruction following to communication-engineering fluency without catastrophic forgetting.  
-* **Evaluation & GUI**:  Informal MCQ benchmarks and a Gradio chat demo confirmed clear gains over the base model—especially on constellation-diagram reasoning and bandwidth/bit-rate trade-offs.
-
-Every command, hyper-parameter choice, and failure mode (e.g. why Mathstral-7B was abandoned) is detailed in the PDF.
-
----
-
-## 4 · What’s in this repository
-
-| File | Description |
-|------|-------------|
-| `CommGPT-3B` folder (automatically pulled) | Int4 / bf16 weight shards + tokenizer configuration |
-| `Implementation.pdf` | 70-page technical narrative covering data pipeline, RAG architecture, fine-tuning, evaluation and GUI snapshots |
-
-No source code or datasets are included because they either reference proprietary material or require closed indices.
-
----
-
-## 5 · Using the weights
+## 3 · Using the weights
 
 Below is a minimal snippet that loads the model for pure text generation (without RAG context).  It still answers many EECE 442 questions from its internal knowledge learned during fine-tuning.
 
@@ -74,24 +42,24 @@ print(chat("Explain why the matched filter maximizes SNR in the presence of AWGN
 
 If you wish to recreate the full RAG assistant, consult the pipeline diagrams and parameter tables in Chapters 3 and 4 of the report, then plug in your own domain documents.
 
-## 6 · Acknowledgements
+## 4 · Acknowledgements
 CommGPT exists thanks to:
 
-Prof. Ibrahim Abou Faycal for granting access to proprietary textbook drafts and providing expert feedback.
+Prof. Ibrahim Abou Faycal and Prof. Jihad Fahs for granting access to proprietary textbook drafts and providing expert feedback.
 
-Alibaba DAMO Academy for releasing Qwen 2.5 under an open license.
+Alibaba for releasing Qwen 2.5 under an open license.
 
-Marker developers for a remarkably accurate PDF→Markdown tool.
+Marker developers for their PDF→ Markdown tool.
 
 The authors of Stella-400 M and MS-MARCO Cross-Encoder for open-sourcing strong embedding models.
 
-AUB’s HPC team and RunPod for the GPU hours that powered weeks of experimentation.
+See the report for more. 
 
-## 7 · License
+## 5 · License
 The CommGPT weights and this README are released under the MIT License.
 All third-party documents referenced during training retain their original licenses and are not redistributed here.
 
-## 8 · Suggested citation
+## 6 · Suggested citation
 
 ```latex
 @misc{CommGPT2025,
